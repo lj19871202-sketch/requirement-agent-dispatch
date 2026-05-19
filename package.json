@@ -1,0 +1,13 @@
+{
+  "name": "requirement-agent-dispatch-pack",
+  "version": "1.0.0",
+  "description": "需求分析与智能体调度技能包 — 自动拆解需求并调度专业 AI 智能体完成工作",
+  "keywords": [
+    "opencode-skill",
+    "requirement-analysis",
+    "agent-dispatch",
+    "task-orchestration"
+  ],
+  "author": "OpenCode Community",
+  "license": "MIT"
+}
