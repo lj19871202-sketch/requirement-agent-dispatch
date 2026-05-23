@@ -41,12 +41,9 @@ cp "$SCRIPT_DIR/SKILL.md" "$TARGET_SKILLS/$SKILL_NAME/"
 echo "  ✓ SKILL.md → $TARGET_SKILLS/$SKILL_NAME/"
 
 echo ""
-echo "[2/3] 部署 Agents (${SKILL_NAME})..."
-mkdir -p "$TARGET_SKILLS/$SKILL_NAME/agents"
-cp "$SCRIPT_DIR"/agents/*.md "$TARGET_SKILLS/$SKILL_NAME/agents/"
+echo "[2/3] 部署 Agents 到全局目录..."
 cp "$SCRIPT_DIR"/agents/*.md "$TARGET_AGENTS/"
 echo "  ✓ $(ls "$SCRIPT_DIR/agents/"*.md 2>/dev/null | wc -l) 个 Agent 已部署到:"
-echo "    - $TARGET_SKILLS/$SKILL_NAME/agents/"
 echo "    - $TARGET_AGENTS/"
 
 echo ""
