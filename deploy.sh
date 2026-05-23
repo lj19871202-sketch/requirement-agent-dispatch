@@ -15,14 +15,12 @@ echo "  Requirement Agent Dispatch Deployment"
 echo "========================================"
 
 # --- 检测目标目录 ---
-if [ -d "$HOME/.config/opencode/skills" ]; then
-  TARGET_SKILLS="$HOME/.config/opencode/skills"
-elif [ -d "$HOME/.opencode/skills" ]; then
-  TARGET_SKILLS="$HOME/.opencode/skills"
+if [ -d "$HOME/.agents/skills" ]; then
+  TARGET_SKILLS="$HOME/.agents/skills"
 else
-  echo "[INFO] 未检测到现有 skills 目录，创建: $HOME/.config/opencode/skills"
-  mkdir -p "$HOME/.config/opencode/skills"
-  TARGET_SKILLS="$HOME/.config/opencode/skills"
+  echo "[INFO] 未检测到现有 skills 目录，创建: $HOME/.agents/skills"
+  mkdir -p "$HOME/.agents/skills"
+  TARGET_SKILLS="$HOME/.agents/skills"
 fi
 
 # --- 检测 agents 目录 ---
