@@ -16,7 +16,7 @@ Built-in mapping of 150+ professional agent scenarios, supporting 5 dispatch mod
 Clone the repository and run the deployment script:
 
 ```bash
-git clone https://github.com/your-username/requirement-agent-dispatch.git
+git clone https://github.com/lj19871202-sketch/requirement-agent-dispatch.git
 cd requirement-agent-dispatch
 chmod +x deploy.sh
 ./deploy.sh
