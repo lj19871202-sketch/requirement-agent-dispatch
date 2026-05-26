@@ -16,7 +16,7 @@
 克隆仓库并运行部署脚本：
 
 ```bash
-git clone https://github.com/your-username/requirement-agent-dispatch.git
+git clone https://github.com/lj19871202-sketch/requirement-agent-dispatch.git
 cd requirement-agent-dispatch
 chmod +x deploy.sh
 ./deploy.sh
