@@ -1,113 +1,135 @@
-# Requirement Agent Dispatch Skill Pack
+# requirement-agent-dispatch
 
-One-click deployment package containing the `requirement-agent-dispatch` skill and **215 specialized AI agents**.
+A requirement analysis and agent dispatch skill for [opencode](https://opencode.ai) — breaks down user requirements into actionable tasks and dispatches them to specialized agents.
 
----
+Built-in mapping of 150+ professional agent scenarios, supporting 5 dispatch modes: single-agent, parallel, pipeline (serial), hybrid, and orchestrator.
 
-## Overview
+## Installation
 
-The Requirement Agent Dispatch skill is OpenCode's **central orchestrator**:
+### Prerequisites
 
-1. **Requirement Decomposition** — Break down user requests into actionable tasks
-2. **Agent Matching** — Match each subtask with the most specialized Agent
-3. **Dispatch & Execution** — Support parallel, sequential, hybrid, and orchestrator modes
-4. **Validation & Polish** — Collect results, verify quality, and polish via web style research (Step 6)
+- [opencode](https://opencode.ai) CLI installed
+- opencode >= 0.1.0
 
----
+### Option 1: One-Click Deploy (Recommended)
 
-## Agent Category Reference
-
-This package includes **215 Agents** across these domains:
-
-| Category | Count | Coverage |
-|----------|-------|----------|
-| Product & Project | 6+ | PRD, Sprint planning, project coordination, task breakdown |
-| Design & UX | 8+ | UI design, UX research, branding, accessibility, whimsy |
-| Frontend | 4+ | Web, mini-program, mobile, rapid prototyping |
-| Backend & Architecture | 8+ | System architecture, database, data engineering, embedded, IoT, FPGA |
-| AI & Data | 5+ | ML models, data remediation, prompt engineering, voice AI |
-| Content & Marketing (CN) | 20+ | Content creation, SEO, Xiaohongshu, Douyin, Zhihu, Bilibili |
-| Overseas Social Media | 10+ | LinkedIn, Instagram, TikTok, Twitter, YouTube |
-| Testing & Quality | 8+ | API testing, performance, security audit, code review |
-| Operations & SRE | 6+ | DevOps, SRE, threat detection, incident response |
-| Business & Operations | 15+ | Private domain, cross-border e-commerce, legal, HR, supply chain |
-| Gaming & XR | 20+ | Unity, Unreal, Godot, Roblox, XR development |
-| Finance & Investment | 8+ | Financial analysis, investment research, tax, risk control |
-| Professional Services | 15+ | Healthcare, legal, procurement, logistics |
-| Paid Media | 8+ | Google Ads, social ads, programmatic, search query analysis |
-| Sales & Business | 10+ | Sales strategy, presales, outbound, proposals |
-
-See all 215 `.md` files under the `agents/` directory for the complete list.
-
----
-
-## One-Click Deployment
+Clone the repository and run the deployment script:
 
 ```bash
-# After cloning or extracting, simply run:
+git clone https://github.com/your-username/requirement-agent-dispatch.git
+cd requirement-agent-dispatch
+chmod +x deploy.sh
 ./deploy.sh
 ```
 
-The script will automatically:
-1. Deploy `SKILL.md` to the OpenCode skills directory
-2. Deploy all 215 Agents to the agents directory (skips if already present)
-3. Verify deployment integrity
+The script automatically:
 
-### Manual Deployment
+1. Detects `~/.agents/skills/` and deploys `SKILL.md` to `~/.agents/skills/requirement-agent-dispatch/`
+2. Detects `~/.opencode/agents/` and copies `agents/*.md` to the global agent directory
+3. Verifies the deployment
+
+### Option 2: Manual Deploy
 
 ```bash
-# macOS / Linux
-mkdir -p ~/.config/opencode/skills/requirement-agent-dispatch
-cp SKILL.md ~/.config/opencode/skills/requirement-agent-dispatch/
-cp agents/*.md ~/.opencode/agents/
+# Deploy skill
+mkdir -p ~/.agents/skills/requirement-agent-dispatch
+cp SKILL.md ~/.agents/skills/requirement-agent-dispatch/
+
+# Deploy agents (if agents directory exists)
+if [ -d "agents" ]; then
+  mkdir -p ~/.opencode/agents
+  cp agents/*.md ~/.opencode/agents/
+fi
 ```
 
-### Windows (PowerShell)
+### Verify Installation
 
-```powershell
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.config\opencode\skills\requirement-agent-dispatch"
-Copy-Item "SKILL.md" "$env:USERPROFILE\.config\opencode\skills\requirement-agent-dispatch\"
-Copy-Item "agents\*" "$env:USERPROFILE\.opencode\agents\"
+```bash
+# Check skill files
+ls ~/.agents/skills/requirement-agent-dispatch/
+# Expected: README.md  SKILL.md
+
+# Check agents deployed
+ls ~/.opencode/agents/*.md | wc -l
+
+# Reload opencode and list skills
+opencode skills list
+# Should include: requirement-agent-dispatch
 ```
-
----
 
 ## Usage
 
-After deployment, restart/reload OpenCode and describe your requirements:
+In an opencode session, when the user presents a requirement that needs multi-step execution, the system automatically detects and prompts to load this skill.
 
-> "Build an e-commerce mini-program including requirements analysis, UI design, frontend/backend development, and testing."
+You can also trigger it manually by describing your task requirements in the conversation.
 
-The skill will automatically:
-1. Decompose the request → match corresponding Agents
-2. Dispatch based on dependency (hybrid sequential/parallel)
-3. Collect all outputs
-4. Search the web for similar content styles and polish the final output
+## Hard Rule
 
-### Dispatch Mode Quick Reference
+**You MUST call the `Task` tool after loading this skill.** Never perform professional operations yourself. The only exception is when you have iterated through all agents and confirmed no match.
 
-| Task Complexity | Recommended Mode | Description |
-|----------------|-----------------|-------------|
-| 1 task | Single Agent | Dispatch one Task with recursive decomposition hint |
-| 2-4 independent tasks | Parallel | Dispatch simultaneously |
-| Sequential dependencies | Pipeline | Pass output from one to the next |
-| Mixed dependencies | Hybrid | Partial parallel + partial sequential |
-| 5+ subtasks | Orchestrator | Use Agent Orchestrator for unified management |
+## Workflow
 
----
+1. **Requirement Analysis** → 2. **Task Decomposition** → 3. **Agent Matching** → 4. **Dispatch Execution** → 5. **Result Verification** → 6. **Internet Style Research & Polish**
 
-## Agent Matching Principles
+## Pre-flight Check (Mandatory)
 
-- **Greedy Granularity Matching** — Match each subdomain to its most specialized Agent; never use a generic one when a specialist exists
-- **Mandatory Step 6** — All human-facing output must go through web style research and polishing
-- **Recursive Dispatch** — Even single tasks hint agents to further decompose
+After loading the skill, output a JSON check result containing `user_requirement`, `domain_analysis`, `decision` (dispatch mode), `dispatch_plan`, and `step_6_polishing`.
 
----
+## Five Dispatch Modes
 
-## Key Files
+| Mode | When to Use | Description |
+|------|-------------|-------------|
+| Single-Agent | Single domain, clear scope | Dispatch one Task with recursive decomposition instruction |
+| Parallel | Multiple independent tasks | Fire multiple Tasks simultaneously with no dependencies |
+| Pipeline (Serial) | Tasks with sequential dependencies | Chain outputs from one Task to the next |
+| Hybrid | Complex requirements | Mix parallel and serial stages |
+| Orchestrator | 5+ subtasks | Use the "Agent Orchestrator" as the top-level dispatcher |
 
-| File | Description |
-|------|-------------|
-| `SKILL.md` | Core skill definition with full dispatch workflow and 300+ scenario-to-agent mappings |
-| `deploy.sh` | One-click deployment script (Linux/macOS) |
-| `agents/*.md` | 215 dispatchable specialized AI agents |
+## Granularity Rule
+
+Specialized agents take precedence over general-purpose agents. For each sub-domain, you must find the best-matching specialized agent from the full agent list. Never use a general agent when a specialized one is available.
+
+## Step 6 (Mandatory): Internet Style Research & Polish
+
+All human-readable text outputs must go through:
+1. Analyze content topic/industry
+2. Search the internet for high-quality content in the same style/genre
+3. Compile a "style reference guide"
+4. Dispatch an agent to polish (never do it yourself)
+5. Preserve factual accuracy
+
+## Self-Check Before Completion
+
+- Was `Task()` actually called?
+- Was every specialized subtask dispatched to the right agent?
+- Was anything done manually "because it seemed simple"?
+- **Was Step 6 (polish) executed?**
+- Does the granularity audit pass?
+
+## Common Anti-Patterns
+
+- ❌ Researching and writing a report yourself → ✅ Split into multiple agents
+- ❌ Using a general agent for specialized tasks → ✅ Use the best-matching specialized agent
+- ❌ Skipping the pre-flight check → ✅ Output JSON check result
+- ❌ Skipping Step 6 polish → ✅ Dispatch an agent to search style references and polish
+
+## Directory Structure
+
+```
+requirement-agent-dispatch/
+├── deploy.sh    # One-click deployment script
+├── README.md    # Chinese README
+├── README.en.md # This file
+├── SKILL.md     # Core skill instructions (includes 150+ agent scenario mapping)
+└── agents/      # Pre-built agent definitions (deployed to ~/.opencode/agents/)
+```
+
+## Related Resources
+
+- [opencode documentation](https://opencode.ai)
+- [opencode skills guide](https://opencode.ai/docs/skills)
+- [opencode agents](https://github.com/anomalyco/opencode-agents)
+
+## License
+
+MIT
